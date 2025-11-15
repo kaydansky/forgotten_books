@@ -1,0 +1,158 @@
+<div class="row mt-4 mb-4">
+    <div class="col-12">
+        <h2>Books Statistics
+            <small class="text-muted font-weight-light text-capitalize">&bullet; {LOGGED_FULL_NAME} | {LOGGED_ROLE}</small>
+        </h2>
+    </div>
+</div>
+<div class="row">
+    <div class="col-12 mb-5">
+        <div class="row">
+            <div class="col-12 mb-5">
+                <div class="card">
+                    <div class="card-header">
+                        <h5><i class="fa fa-pause"></i>&nbsp;&nbsp;Number of Books Waiting</h5>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-sm table-bordered text-center">
+                            <thead>
+                            <tr>
+                                {QUEUES_HEADER}
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                {ROWS_BOOKS_WAITING}
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 mb-5">
+                <div class="card">
+                    <div class="card-header">
+                        <h5><i class="fa fa-clipboard-check"></i>&nbsp;&nbsp;Number of Books Completed Last <b>Week</b></h5>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-sm table-bordered text-center">
+                            <thead>
+                            <tr>
+                                {QUEUES_HEADER}
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                {ROWS_BOOKS_COMPLETED_WEEK}
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 mb-5">
+                <div class="card">
+                    <div class="card-header">
+                        <h5><i class="fa fa-clipboard-check"></i>&nbsp;&nbsp;Number of Books Completed Last <b>Month</b></h5>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-sm table-bordered text-center">
+                            <thead>
+                            <tr>
+                                {QUEUES_HEADER}
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                {ROWS_BOOKS_COMPLETED_MONTH}
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 mb-5">
+                <div class="card">
+                    <div class="card-header">
+                        <h5><i class="fa fa-book"></i>&nbsp;&nbsp;All <b>Completed</b> Books</h5>
+                    </div>
+                    <div class="card-body pl-1 pr-1">
+                        <table class="table table-bordered" style="width:100%" id="completedBooks">
+                            <thead>
+                            <tr>
+                                <th>PIBN</th>
+                                <th>Title</th>
+                                <th>Author 1</th>
+                                <th>Author 2</th>
+                                <th>Completion Date</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 mb-5">
+                <div class="card">
+                    <div class="card-header">
+                        <h5><i class="fa fa-book-dead"></i>&nbsp;&nbsp;All <b>Removed</b> Books</h5>
+                    </div>
+                    <div class="card-body pl-1 pr-1">
+                        <table class="table table-bordered" style="width:100%" id="removedBooks">
+                            <thead>
+                            <tr>
+                                <th>PIBN</th>
+                                <th>Title</th>
+                                <th>Author 1</th>
+                                <th>Author 2</th>
+                                <th>Removal Date</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('#completedBooks').DataTable({
+            order: [[4, 'desc']],
+            ajax: "/statistics/?ajax_completed=1",
+            stateSave: true
+        });
+
+        $('#removedBooks').DataTable({
+            order: [[4, 'desc']],
+            ajax: "/statistics/?ajax_removed=1",
+            stateSave: true
+        });
+    });
+</script>

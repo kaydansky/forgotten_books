@@ -1,0 +1,40 @@
+label.error {
+    color: red;
+    font-size: small;
+    margin-bottom: 0em;
+}
+
+input:focus.error {
+    border: 2px dotted red;
+}
+
+.scroll {
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.scroll-large {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.scroll-xl {
+    max-height: 600px;
+    overflow-y: auto;
+}
+
+.highlighted {
+    background-color: bisque;
+}
+
+.text-wrap {
+    white-space: normal;
+}
+
+.width-kw-tag {
+    max-width: 170px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    cursor: pointer;
+}

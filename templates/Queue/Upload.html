@@ -1,0 +1,198 @@
+<div class="modal fade" id="duplicate-pibn" tabindex="-1" role="dialog" aria-labelledby="DuplicatePibn" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="DuplicatePibn">PIBN Already Exists</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p class="text-center">The following book will be removed, all the data will be lost:</p>
+                <p>PIBN: <span class="font-weight-bold" id="DuplPibn"></span></p>
+                <p>TITLE: <span class="font-weight-bold" id="DuplTitle"></span></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="button" id="DuplConfirm" class="btn btn-primary">Continue</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{HEADER}
+<div class="row">
+    <div class="col">
+        <form id="BookUploadForm" action="/queue/upload" method="post" enctype="multipart/form-data">
+        <div class="card mb-4">
+                <div class="card-body bg-light">
+                    <div class="form-row">
+                        <div class="form-group col-3">
+                            <label for="Pibn">PIBN<span class="text-danger">&ast;</span></label>
+                            <input name="pibn" type="text" class="form-control" id="Pibn">
+                        </div>
+                        <div class="form-group col-lg-4">
+                            <label for="QueueSlider">Select Queue&nbsp;&rarr;&nbsp;<span id="QueueNum"></span></label>
+                            <input name="queue_number" id="QueueSlider" value="1" min="1" max="11" type="range" class="custom-range mt-2" style="border:0;">
+                        </div>
+                        <div id="WorkerList" class="form-group col-lg-5">
+                            {SELECT_WORKER}
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-12">
+                            Upload Files To:&nbsp;&nbsp;
+                            <span id="FilePath1" class="mark lead px-0">Enter PIBN and select Queue above to retrieve location</span><span id="FilePathName" class="mark lead px-0"></span><span id="FilePath2" class="mark lead px-0"></span>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col">
+                            <label for="Title">Title</label>
+                            <input name="title" type="text" class="form-control" id="Title">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col">
+                            <label for="Subtitle">Subtitle</label>
+                            <input name="subtitle" type="text" class="form-control" id="Subtitle">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col">
+                            <label for="Author1">Author</label>
+                            <input name="author1" type="text" class="form-control" id="Author1">
+                        </div>
+                        <div class="form-group col">
+                            <label for="Author2">Author 2</label>
+                            <input name="author2" type="text" class="form-control" id="Author2">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-2">
+                            <label for="Volume">Volume</label>
+                            <input name="volume" type="number" class="form-control" id="Volume">
+                        </div>
+                        <div class="form-group col-auto">
+                            <span>of</span>
+                        </div>
+                        <div class="form-group col-2">
+                            <label for="Volumes_total">Volume Total</label>
+                            <input name="volumes_total" type="number" class="form-control" id="Volumes_total">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-2">
+                            <label for="Word_count">Word Count</label>
+                            <input name="word_count" type="number" class="form-control" id="Word_count">
+                        </div>
+                        <div class="form-group col-3">
+                            <label for="Images_number">Number of Images</label>
+                            <input name="images_number" type="number" class="form-control" id="Images_number">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col">
+                            <label for="Comments">Comments</label>
+                            <textarea name="comments" class="form-control" id="Comments" rows="3"></textarea>
+                        </div>
+                    </div>
+                </div>
+            <div class="card-footer">
+                <div class="form-row">
+                    <div class="form-group col-sm-12 col-xl-12">
+                        <button id="ButtonUpload" class="btn btn-success">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    $('#BookUploadForm').submit(function (e) {
+        if ($('#removeDuplicate').val() == 1) {
+            return true;
+        }
+
+        e.preventDefault();
+
+        var check = $.post("/queue/", {check_duplicate_pibn: $('#Pibn').val()}, function(){}, "json");
+
+        check.done(function (data) {
+            if (data.pibn == $('#Pibn').val()) {
+                $('#duplicate-pibn').modal('show');
+                $('#DuplPibn').text(data.pibn);
+                $('#DuplTitle').text(data.title);
+            } else {
+                submitForm();
+            }
+        });
+    });
+
+    $('#duplicate-pibn').on('click', '#DuplConfirm,#Uconfirm', function (e) {
+        $(e.delegateTarget).modal('hide');
+        submitForm();
+    });
+
+    function submitForm() {
+        var input = $('<input>').attr('type', 'hidden').attr('id', 'removeDuplicate').val(1);
+        $('#BookUploadForm').append(input);
+        $('#BookUploadForm').submit();
+    };
+
+    $("#BookUploadForm").validate({
+        ignore: [],
+        rules: {
+            pibn: {
+                required: true,
+                number: true
+            },
+            requested_user: {
+                required: true
+            }
+        },
+        messages: {
+            pibn: {
+                required: 'Provide PIBN number'
+            },
+            requested_user: {
+                required: 'No Worker available'
+            }
+        }
+    });
+
+    var arrQueue = [{QUEUE_NAMES}];
+    var arrQueueFolder = [{QUEUE_FOLDER}];
+    $('#WorkerRole').hide();
+
+    $('#QueueNum').html($('#QueueSlider').val() + '. ' + arrQueue[$('#QueueSlider').val()]);
+
+    $('#QueueSlider').on('input', function () {
+        $('#QueueNum').html($(this).val() + '. ' + arrQueue[$(this).val()]);
+        var folders = arrQueueFolder[$(this).val()].split('|');
+
+        $.post('/queue/', { slider_queue:  $(this).val() }).done(function(data) {
+            $('#WorkerList').html(data);
+
+            if (folders[1]) {
+                $('#FilePathName').text($("#InputWorker").text());
+            } else {
+                $('#FilePathName').text('');
+            }
+        });
+
+        $('#FilePath1').text($('#Pibn').val() + folders[0]);
+        $('#FilePath2').text(folders[1]);
+    });
+
+    $('#Pibn').on('input', function () {
+        var folders = arrQueueFolder[$('#QueueSlider').val()].split('|');
+        $('#FilePath1').text($(this).val() + folders[0]);
+        $('#FilePath2').text(folders[1]);
+
+        if (folders[1]) {
+            $('#FilePathName').text($("#InputWorker").text());
+        }
+    });
+</script>

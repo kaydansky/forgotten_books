@@ -1,0 +1,64 @@
+<div class="modal fade" id="modalComments" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="myModalLabel">Comments | PIBN <span id="modalPibn"></span></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <ul id="commentsBody" class="list-group list-group-flush bg-light scroll-large"></ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4 mb-4">
+    <div class="col-12">
+        <h3>Work Statistics of <span class="text-muted">{WORKER_NAME}, ID: <b>{WORKER_ID}</b></span>
+            <small class="text-muted font-weight-light text-capitalize">&bullet; {LOGGED_FULL_NAME} | {LOGGED_ROLE}</small>
+        </h3>
+    </div>
+</div>
+<div class="row">
+    <div class="col-12 mb-5">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fa fa-chart-line"></i></h5>
+            </div>
+            <div class="card-body">
+                <table class="table table-bordered" style="width: 100%" id="booksTable">
+                    <thead>
+                    <tr class="text-center">
+                        <th colspan="2" class="font-weight-normal">Number of Books Completed</th>
+                        <th colspan="2" class="font-weight-normal">Word Count</th>
+                        <th colspan="2" class="font-weight-normal">Work Rejected</th>
+                    </tr>
+                    <tr>
+                        <th class="font-weight-normal">Last Week</th>
+                        <th class="font-weight-normal">Last 4 Weeks</th>
+                        <th class="font-weight-normal">Last Week</th>
+                        <th class="font-weight-normal">Last 4 Weeks</th>
+                        <th class="font-weight-normal">Last Week</th>
+                        <th class="font-weight-normal">Last 4 Weeks</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr  class="font-weight-bolder">
+                        <td>{BOOKS_LAST_WEEK}</td>
+                        <td>{BOOKS_LAST_MONTH}</td>
+                        <td>{WORDS_LAST_WEEK}</td>
+                        <td>{WORDS_LAST_MONTH}</td>
+                        <td>{REJECTED_LAST_WEEK}</td>
+                        <td>{REJECTED_LAST_MONTH}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,162 @@
+{HEADER}
+<div class="row">
+    <div class="col">
+        <div class="card mb-4 {DISPLAY_FORM}">
+            <form id="Form1" action="/queue/proofreader/{BOOK_ID}" method="post" enctype="multipart/form-data">
+                <fieldset {FIELDSET_DISABLED}>
+                <input type="hidden" name="pibn" value="{pibn}">
+                <input type="hidden" name="isbn" value="{isbn}">
+                <div class="card-body bg-light">
+                    <div class="form-row {DISPLAY_PATHS}">
+                        <div class="form-group flex-column">
+                            <table class="table table-sm table-borderless">
+                                <tr class="border-bottom border-info">
+                                    <td class="align-middle text-right">Download source file:</td>
+                                    <td class="mark lead">{PIBN}/Proof/Workers/{ASSIGNEE_NAME}/To Do</td>
+                                </tr>
+                                <tr class="border-bottom border-info">
+                                    <td class="align-middle text-right">Upload your working copy:</td>
+                                    <td class="mark lead">{PIBN}/Proof/Workers/{ASSIGNEE_NAME}/In Progress</td>
+                                </tr>
+                                <tr>
+                                    <td class="align-middle text-right">Before submitting the form move copy:</td>
+                                    <td class="mark lead">{PIBN}/Proof/Workers/{ASSIGNEE_NAME}/Completed</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col">
+                            <label for="Title">Title</label>
+                            <input name="title" id="Title" value="{title}" type="text" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col">
+                            <label for="Subtitle">Subtitle</label>
+                            <input name="subtitle" id="Subtitle" value="{subtitle}" type="text" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col">
+                            <label for="Author1">Author</label>
+                            <input name="author1" id="Author1" value="{author1}" type="text" class="form-control">
+                        </div>
+                        <div class="form-group col">
+                            <label for="Author2">Author 2</label>
+                            <input name="author2" id="Author2" value="{author2}" type="text" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-2">
+                            <label for="Volume">Volume</label>
+                            <input name="volume" id="Volume" value="{volume}" type="number" class="form-control">
+                        </div>
+                        <div class="form-group col-auto">
+                            <span>of</span>
+                        </div>
+                        <div class="form-group col-2">
+                            <label for="Volumes_total">Volume Total</label>
+                            <input name="volumes_total" id="Volumes_total" value="{volumes_total}" type="number" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-2">
+                            <label for="Word_count">Word Count</label>
+                            <input name="word_count" id="Word_count" value="{word_count}" type="number" class="form-control">
+                        </div>
+                        <div class="form-group col-3">
+                            <label for="Images_number">Number of Images</label>
+                            <input name="images_number" id="Images_number" value="{images_number}" type="number" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col">
+                            <label>Comments</label>
+                            <div class="card card-body bg-light">
+                                <ul class="list-group list-group-flush bg-light scroll">
+                                    {BOOK_COMMENTS}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col">
+                            <label for="Comments">Add Comment</label>
+                            <textarea name="comments" id="Comments" class="form-control" rows="3">{comments}</textarea>
+                        </div>
+                    </div>
+                </div>
+                </fieldset>
+            </form>
+            <div class="card-footer {DISPLAY_SUBMIT}">
+                <div class="form-row">
+                    <div class="form-group col-sm-6 col-xl-6">
+                        <button id="BookCompleted" class="btn btn-success mr-3">Book Completed</button>
+                        <button id="BookHasImages" class="btn btn-outline-success">Book Completed Has Images</button>
+                    </div>
+                    <div class="form-group col-sm-6 col-xl-6">
+                        <div class="float-right">
+                            <button id="SupervisorAttention" class="btn btn-outline-danger mr-3">Request Supervisor Attention</button>
+                            <button class="btn btn-outline-info">Search Alternative Versions</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{AVAILABLE_BOOKS}
+
+<script>
+    $(document).ready(function() {
+        $('#RequestBook').on('click', function () {
+            $.post('/queue/proofreader/', { request: {PIBN}, queue: 1 }).done(function(data) {
+                location.assign('/queue/proofreader/');
+            });
+        });
+
+        $('#BookCompleted').on('click', function () {
+            $('#SupervisorAttention').data('clicked', false);
+            $('#Form1 input[name="supervisor_attention"]').val('');
+            submitForm(2);
+        });
+
+        $('#BookHasImages').on('click', function () {
+            $('#SupervisorAttention').data('clicked', false);
+            var input = $('<input>').attr('type', 'hidden').attr('name', 'has_images').val(1);
+            $('#Form1').append(input);
+            $('#Form1 input[name="supervisor_attention"]').val('');
+            submitForm(2);
+        });
+
+        $('#SupervisorAttention').on('click', function () {
+            $(this).data('clicked', true);
+            var input = $('<input>').attr('type', 'hidden').attr('name', 'supervisor_attention').val(1);
+            $('#Form1').append(input);
+            submitForm(2);
+        });
+
+        function submitForm(queue) {
+            var input = $('<input>').attr('type', 'hidden').attr('name', 'next_queue').val(queue);
+            $('#Form1').append(input);
+            $('#Form1').submit();
+        };
+
+        $('#Form1').validate({
+            rules: {
+                comments: {
+                    required: {
+                        depends: function (element) {
+                            return $('#SupervisorAttention').data('clicked');
+                        }
+                    }
+                }
+            },
+            messages: {
+                comments: 'Please provide your comments'
+            }
+        });
+    });
+</script>

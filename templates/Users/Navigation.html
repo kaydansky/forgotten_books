@@ -1,0 +1,35 @@
+<nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item dropdown{ACTIVE_UPLOAD}{ACTIVE_PROOFREADER}{ACTIVE_PROOFREADER_SUPERVISOR}{ACTIVE_IMAGE_EDITOR}{ACTIVE_LAYOUT}{ACTIVE_LAYOUT_SUPERVISOR}{ACTIVE_BLURB_WRITER}{ACTIVE_BLURB_EDITOR}{ACTIVE_COVER_ARTIST}{ACTIVE_FINAL_APPROVAL}">
+                <a class="nav-link dropdown-toggle" href="#" id="DropdownQueue" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Queue
+                </a>
+                <div class="dropdown-menu" aria-labelledby="DropdownQueue">
+                    <a class="dropdown-item{ACTIVE_UPLOAD}" href="/queue/upload/">0. Upload</a>
+                    <a class="dropdown-item{ACTIVE_PROOFREADER}" href="/queue/proofreader">1. Proofreader</a>
+                    <a class="dropdown-item{ACTIVE_PROOFREADER_SUPERVISOR}" href="/queue/proofing_supervisor">2. Proofing Supervisor</a>
+                    <a class="dropdown-item{ACTIVE_IMAGE_EDITOR}" href="/queue/image_editor">3. Image Editor</a>
+                    <a class="dropdown-item{ACTIVE_LAYOUT}" href="/queue/layout_editor">4. Layout</a>
+                    <a class="dropdown-item{ACTIVE_LAYOUT_SUPERVISOR}" href="/queue/layout_supervisor">5. Layout Supervisor</a>
+                    <a class="dropdown-item{ACTIVE_BLURB_WRITER}" href="/queue/blurb_writer">6. Blurb Writer</a>
+                    <a class="dropdown-item{ACTIVE_BLURB_EDITOR}" href="/queue/blurb_editor">7. Blurb Editor</a>
+                    <a class="dropdown-item{ACTIVE_COVER_ARTIST}" href="/queue/cover_artist">8. Cover Artist</a>
+                    <a class="dropdown-item{ACTIVE_FINAL_APPROVAL}" href="/queue/coordinator">9. Final Approval</a>
+                </div>
+            </li>
+            <li class="nav-item{ACTIVE_STATISTICS}">
+                <a class="nav-link" href="/statistics">Books Statistics</a>
+            </li>
+            <li class="nav-item{ACTIVE_USERS}">
+                <a class="nav-link" href="/users">Manage Workers</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/login/logout">Logout</a>
+            </li>
+        </ul>
+    </div>
+</nav>

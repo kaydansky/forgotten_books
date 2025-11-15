@@ -1,0 +1,202 @@
+{HEADER}
+<div class="row">
+    <div class="col">
+        <form id="Form5" action="/queue/layout_supervisor/{BOOK_ID}" method="post" enctype="multipart/form-data">
+            <div class="card mb-4 {DISPLAY_FORM}">
+                <fieldset {FIELDSET_DISABLED}>
+                    <input type="hidden" name="pibn" value="{pibn}">
+                    <input type="hidden" name="isbn" value="{isbn}">
+                    <input type="hidden" name="blurb" value="{blurb}">
+                    <div class="card-body bg-light">
+                        <div class="form-row {DISPLAY_PATHS}">
+                            <div class="form-group flex-column">
+                                <table class="table table-sm table-borderless">
+                                    <tr class="border-bottom border-info">
+                                        <td class="align-middle text-right">Download source file:</td>
+                                        <td class="mark lead">{SOURCE_FILE_LOCATION}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="align-middle text-right">Upload your copy:</td>
+                                        <td class="mark lead">{PIBN}/Layout/Supervisors/{ASSIGNEE_NAME}/In Progress</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col">
+                                <label for="Title">Title</label>
+                                <input name="title" id="Title" value="{title}" type="text" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col">
+                                <label for="Subtitle">Subtitle</label>
+                                <input name="subtitle" id="Subtitle" value="{subtitle}" type="text" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col">
+                                <label for="Author1">Author</label>
+                                <input name="author1" id="Author1" value="{author1}" type="text" class="form-control">
+                            </div>
+                            <div class="form-group col">
+                                <label for="Author2">Author 2</label>
+                                <input name="author2" id="Author2" value="{author2}" type="text" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-2">
+                                <label for="Volume">Volume</label>
+                                <input name="volume" id="Volume" value="{volume}" type="number" class="form-control">
+                            </div>
+                            <div class="form-group col-auto">
+                                <span>of</span>
+                            </div>
+                            <div class="form-group col-2">
+                                <label for="Volumes_total">Volume Total</label>
+                                <input name="volumes_total" id="Volumes_total" value="{volumes_total}" type="number" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-2">
+                                <label for="Word_count">Word Count</label>
+                                <input name="word_count" id="Word_count" value="{word_count}" type="number" class="form-control">
+                            </div>
+                            <div class="form-group col-3">
+                                <label for="Images_number">Number of Images</label>
+                                <input name="images_number" id="Images_number" value="{images_number}" type="number" class="form-control">
+                            </div>
+                            <div class="form-group col-3">
+                                <label for="Images_number">Number of Pages</label>
+                                <input name="pages_number" id="Pages_number" value="{pages_number}" type="number" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col">
+                                <label>Comments</label>
+                                <div class="card card-body bg-light">
+                                    <ul class="list-group list-group-flush bg-light scroll">
+                                        {BOOK_COMMENTS}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col">
+                                <label for="Comments">Add Comment</label>
+                                <textarea name="comments" id="Comments" class="form-control" rows="3">{comments}</textarea>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col">
+                                <label for="ListMissingPages">List Missing Pages</label>
+                                <input name="missing_pages" id="ListMissingPages" value="{missing_pages}" type="text" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer {DISPLAY_SUBMIT}">
+                        <div class="form-row">
+                            <div class="form-group col-auto pt-2">
+                                {SELECT_WORKER}
+                            </div>
+                            <div class="form-group col-sm-2 col-xl-2">
+                                <button id="BookCompleted" class="btn btn-success mr-3">Book Completed</button>
+                            </div>
+                            <div class="form-group col-auto">
+                                <button id="TooManyErrors" class="btn btn-outline-danger mr-3">Too Many Errors</button>
+                                <button id="CoordinatorAttention" class="btn btn-outline-danger mr-3">Request Coordinator Attention</button>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-12">
+                                Move file to: <span id="FilePath1" class="mark lead px-0"></span><span id="FilePathName" class="mark lead px-0"></span><span id="FilePath2" class="mark lead px-0"></span>&nbsp;&nbsp;
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+        </form>
+    </div>
+</div>
+
+{AVAILABLE_BOOKS}
+
+<script>
+    $(document).ready(function() {
+        var nextWorkerId = $('#Form5 input[name="requested_user"]').val();
+
+        $('#RequestBook').on('click', function () {
+            $.post('/queue/layout_supervisor/', { request: {PIBN}, queue: 5 }).done(function(data) {
+                location.assign('/queue/layout_supervisor/');
+            });
+        });
+
+        $('#BookCompleted').on('click', function (event) {
+            event.preventDefault();
+            $(this).data('clicked', true);
+            $('#CoordinatorAttention').data('clicked', false);
+            $('#Form5 input[name="too_many_errors"]').val('');
+            $('#Form5 input[name="coordinator_attention"]').val('');
+            submitForm(6);
+        });
+
+        $('#TooManyErrors').on('click', function (event) {
+            event.preventDefault();
+            $('#CoordinatorAttention').data('clicked', true);
+            $('#Form5 input[name="requested_user"]').val('');
+            $('#Form5 input[name="requested_user"]').val({PREVIOUS_QUEUE_WORKER});
+            var input = $('<input>').attr('type', 'hidden').attr('name', 'too_many_errors').val(1);
+            $('#Form5').append(input);
+            submitForm(4);
+        });
+
+        $('#CoordinatorAttention').on('click', function (event) {
+            event.preventDefault();
+            $(this).data('clicked', true);
+            $('#Form5 input[name="requested_user"]').val('');
+            var input = $('<input>').attr('type', 'hidden').attr('name', 'coordinator_attention').val(1);
+            $('#Form5').append(input);
+            submitForm(9);
+        });
+
+        function submitForm(queue) {
+            if (queue == 6) {
+                $('#Form5 input[name="requested_user"]').val(nextWorkerId);
+            }
+
+            var input = $('<input>').attr('type', 'hidden').attr('name', 'next_queue').val(queue);
+            $('#Form5').append(input);
+            $('#Form5').submit();
+        };
+
+        $('#Form5').validate({
+            ignore: [],
+            rules: {
+                comments: {
+                    required: {
+                        depends: function (element) {
+                            return $('#CoordinatorAttention').data('clicked');
+                        }
+                    }
+                },
+                requested_user: {
+                    required: {
+                        depends: function (element) {
+                            return $('#BookCompleted').data('clicked');
+                        }
+                    }
+                }
+            },
+            messages: {
+                comments: 'Please provide your comments',
+                requested_user: 'No Worker available'
+            }
+        });
+
+        var arrQueueFolder = [{QUEUE_FOLDER}];
+        var folders = arrQueueFolder[6].split('|');
+        $('#FilePath1').text({PIBN} + folders[0]);
+        $('#FilePathName').text($('#InputWorker').text());
+        $('#FilePath2').text(folders[1]);
+    });
+</script>

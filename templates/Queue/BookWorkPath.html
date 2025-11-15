@@ -1,0 +1,16 @@
+<li class="list-group-item">
+    <div class="row align-items-center">
+        <div class="col-auto pr-3">
+            <span class="badge badge-light">{count}</span>
+        </div>
+        <div class="col-11 border-left pl-3">
+            <div class="media">
+                <div class="media-body">
+                    <h6 class="mt-1"><span class="mark px-0">{first_name}&nbsp;{last_name}</span>&nbsp;<span class="text-muted">&blacktriangleright;</span>{role}&nbsp;<span class="text-muted">&bullet;&nbsp;{date}</span>&nbsp;<span class="text-danger {display_supervisor}">&bullet;&nbsp;Flagged for Supervisor attention!</span><span class="text-danger {display_coordinator}">&bullet;&nbsp;Flagged for Coordinator attention!</span><span class="text-danger {display_many_errors}">&bullet;&nbsp;Too many errors!</span></h6>
+                    {action}
+                    <p class="font-italic">{comment}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</li>

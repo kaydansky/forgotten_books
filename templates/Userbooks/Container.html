@@ -1,0 +1,81 @@
+<div class="modal fade" id="modalComments" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="myModalLabel">Comments | PIBN <span id="modalPibn"></span></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <ul id="commentsBody" class="list-group list-group-flush bg-light scroll-large"></ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4 mb-4">
+    <div class="col-12">
+        <h3>All Books worked by <span class="text-muted">{WORKER_NAME}, ID: <b>{WORKER_ID}</b></span>
+            <small class="text-muted font-weight-light text-capitalize">&bullet; {LOGGED_FULL_NAME} | {LOGGED_ROLE}</small>
+        </h3>
+    </div>
+</div>
+<div class="row">
+    <div class="col-12 mb-5">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fa fa-book"></i>&nbsp;&nbsp;Book List</h5>
+            </div>
+            <div class="card-body">
+                <table class="table table-bordered" style="width: 100%" id="booksTable">
+                    <thead>
+                    <tr>
+                        <th>PIBN</th>
+                        <th>Title</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                        <th class="text-center">Comments</th>
+                    </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('#booksTable').DataTable({
+            ajax: '/userbooks/{WORKER_ID}/?ajax_user_books=1',
+            stateSave: true,
+            columnDefs: [
+                {
+                    targets: 4,
+                    searchable: false,
+                    orderable: false,
+                    render: function (data, type, full, meta) {
+                        return "<div class='text-center'>" + data + "</div>";
+                    }
+                },
+                {
+                    targets: 2,
+                    order: 'desc',
+                    render: function (data, type, full, meta) {
+                        return "<div class='text-nowrap'>" + data + "</div>";
+                    }
+                }]
+        });
+    });
+
+    $('#modalComments').on('show.bs.modal', function (e) {
+        var data = $(e.relatedTarget).data();
+        $.post('/userbooks', { ajax_pibn: data.bookId }).done(function(result) {
+            $('#commentsBody').html(result);
+            $('#modalPibn').text(data.bookId);
+        });
+    });
+</script>

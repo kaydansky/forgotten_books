@@ -1,0 +1,121 @@
+{HEADER}
+<div class="row">
+    <div class="col">
+        <div class="card mb-4 {DISPLAY_FORM}">
+            <form id="Form6" action="/queue/blurb_writer/{BOOK_ID}" method="post" enctype="multipart/form-data">
+                <fieldset {FIELDSET_DISABLED}>
+                <input type="hidden" name="pibn" value="{pibn}">
+                <input type="hidden" name="isbn" value="{isbn}">
+                <input type="hidden" name="title" value="{title}">
+                <input type="hidden" name="subtitle" value="{subtitle}">
+                <input type="hidden" name="author1" value="{author1}">
+                <input type="hidden" name="author2" value="{author2}">
+                <input type="hidden" name="volume" value="{volume}">
+                <input type="hidden" name="volumes_total" value="{volumes_total}">
+                <input type="hidden" name="word_count" value="{word_count}">
+                <input type="hidden" name="images_number" value="{images_number}">
+                <input type="hidden" name="pages_number" value="{pages_number}">
+                <input type="hidden" name="missing_pages" value="{missing_pages}">
+                <div class="card-body bg-light">
+                    <div class="form-row {DISPLAY_PATHS}">
+                        <div class="form-group flex-column">
+                            <table class="table table-sm table-borderless">
+                                <tr class="border-bottom border-info">
+                                    <td class="align-middle text-right">Download source file:</td>
+                                    <td class="mark lead">{PIBN}/Cover/Blurbs/Writers/{ASSIGNEE_NAME}/To Do</td>
+                                </tr>
+                                <tr class="border-bottom border-info">
+                                    <td class="align-middle text-right">Upload your working copy:</td>
+                                    <td class="mark lead">{PIBN}/Cover/Blurbs/Writers/{ASSIGNEE_NAME}/In Progress</td>
+                                </tr>
+                                <tr>
+                                    <td class="align-middle text-right">Before submitting the form move copy:</td>
+                                    <td class="mark lead">{PIBN}/Cover/Blurbs/Writers/{ASSIGNEE_NAME}/Completed</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col">
+                            <label for="Blurb">Blurb</label>
+                            <textarea name="blurb" id="Blurb" class="form-control" rows="5">{blurb}</textarea>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col">
+                            <label>Comments</label>
+                            <div class="card card-body bg-light">
+                                <ul class="list-group list-group-flush bg-light scroll">
+                                    {BOOK_COMMENTS}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col">
+                            <label for="Comments">Add Comment</label>
+                            <textarea name="comments" id="Comments" class="form-control" rows="3">{comments}</textarea>
+                        </div>
+                    </div>
+                </div>
+                </fieldset>
+            </form>
+            <div class="card-footer {DISPLAY_SUBMIT}">
+                <div class="form-row">
+                    <div class="form-group col-auto">
+                        <button id="BlurbCompleted" class="btn btn-success mr-3">Blurb Completed</button>
+                    </div>
+                    <div class="form-group col-auto">
+                        <button id="SupervisorAttention" class="btn btn-outline-danger mr-3">Request Supervisor Attention</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{AVAILABLE_BOOKS}
+
+<script>
+    $(document).ready(function() {
+        $('#RequestBook').on('click', function () {
+            $.post('/queue/blurb_writer/', { request: {PIBN}, queue: 6 }).done(function(data) {
+                location.assign('/queue/blurb_writer/');
+            });
+        });
+
+        $('#BlurbCompleted').on('click', function () {
+            $('#SupervisorAttention').data('clicked', false);
+            $('#Form6 input[name="supervisor_attention"]').val('');
+            submitForm(7);
+        });
+
+        $('#SupervisorAttention').on('click', function () {
+            $(this).data('clicked', true);
+            var input = $('<input>').attr('type', 'hidden').attr('name', 'supervisor_attention').val(1);
+            $('#Form6').append(input);
+            submitForm(7);
+        });
+
+        function submitForm(queue) {
+            var input = $('<input>').attr('type', 'hidden').attr('name', 'next_queue').val(queue);
+            $('#Form6').append(input);
+            $('#Form6').submit();
+        };
+
+        $('#Form6').validate({
+            rules: {
+                comments: {
+                    required: {
+                        depends: function (element) {
+                            return $('#SupervisorAttention').data('clicked');
+                        }
+                    }
+                }
+            },
+            messages: {
+                comments: 'Please provide your comments'
+            }
+        });
+    });
+</script>

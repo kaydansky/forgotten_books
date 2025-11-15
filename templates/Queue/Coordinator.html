@@ -1,0 +1,257 @@
+{HEADER}
+<div class="row">
+    <div class="col">
+        <form id="Form9" action="/queue/coordinator/{BOOK_ID}" method="post" enctype="multipart/form-data">
+            <div class="card mb-4 {DISPLAY_FORM}">
+                <fieldset {FIELDSET_DISABLED}>
+                <input type="hidden" name="pibn" value="{pibn}">
+                <!--<input type="hidden" name="missing_pages" value="{missing_pages}">-->
+                <div class="card-body bg-light">
+                    <div class="form-row {DISPLAY_PATHS}">
+                        <div class="form-group flex-column">
+                            <table class="table table-sm table-borderless">
+                                <tr class="border-bottom border-info">
+                                    <td class="align-middle text-right">Download source file:</td>
+                                    <td class="mark lead">{SOURCE_FILE_LOCATION}</td>
+                                </tr>
+                                <tr>
+                                    <td class="align-middle text-right">Move approved file:</td>
+                                    <td class="mark lead">{PIBN}/Consolidation</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-3">
+                            <label for="Isbn">ISBN</label>
+                            <input name="isbn" id="Isbn" value="{isbn}" type="text" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col">
+                            <label for="Title">Title</label>
+                            <input name="title" id="Title" value="{title}" type="text" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col">
+                            <label for="Subtitle">Subtitle</label>
+                            <input name="subtitle" id="Subtitle" value="{subtitle}" type="text" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col">
+                            <label for="Author1">Author</label>
+                            <input name="author1" id="Author1" value="{author1}" type="text" class="form-control">
+                        </div>
+                        <div class="form-group col">
+                            <label for="Author2">Author 2</label>
+                            <input name="author2" id="Author2" value="{author2}" type="text" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-2">
+                            <label for="Volume">Volume</label>
+                            <input name="volume" id="Volume" value="{volume}" type="number" class="form-control">
+                        </div>
+                        <div class="form-group col-auto">
+                            <span>of</span>
+                        </div>
+                        <div class="form-group col-2">
+                            <label for="Volumes_total">Volume Total</label>
+                            <input name="volumes_total" id="Volumes_total" value="{volumes_total}" type="number" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-2">
+                            <label for="Word_count">Word Count</label>
+                            <input name="word_count" id="Word_count" value="{word_count}" type="number" class="form-control">
+                        </div>
+                        <div class="form-group col-3">
+                            <label for="Images_number">Number of Images</label>
+                            <input name="images_number" id="Images_number" value="{images_number}" type="number" class="form-control">
+                        </div>
+                        <div class="form-group col-3">
+                            <label for="Images_number">Number of Pages</label>
+                            <input name="pages_number" id="Pages_number" value="{pages_number}" type="number" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col">
+                            <label>
+                                <a id="collapseCommentsToggle" class="btn btn-outline-dark" style="width: 150px; pointer-events: all;" data-toggle="collapse" href="#collapseComments" role="button" aria-expanded="true" aria-controls="collapseComments">Comments</a>
+                            </label>
+                            <div class="collapse show" id="collapseComments">
+                                <div class="card card-body bg-light">
+                                    <ul class="list-group list-group-flush bg-light scroll">
+                                        {BOOK_COMMENTS}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col">
+                            <label>
+                                <a id="collapseWorkPathToggle" class="btn btn-outline-dark clps" style="width: 150px; pointer-events: all;" data-toggle="collapse" href="#collapseWorkPath" role="button" aria-expanded="false" aria-controls="collapseWorkPath">Work Path</a>
+                            </label>
+                            <div class="collapse" id="collapseWorkPath">
+                                <div class="card card-body bg-light">
+                                    <ul class="list-group list-group-flush bg-light scroll-large">
+                                        {BOOK_WORK_PATH}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col">
+                            <label for="Comments">Add Comment</label>
+                            <textarea name="comments" id="Comments" class="form-control" rows="3"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col">
+                            <label for="Blurb">Blurb</label>
+                            <textarea name="blurb" id="Blurb" class="form-control" rows="5">{blurb}</textarea>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col">
+                            <label for="ListMissingPages">List Missing Pages</label>
+                            <input name="missing_pages" id="ListMissingPages" value="{missing_pages}" type="text" class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer {DISPLAY_SUBMIT}">
+                    <div class="form-row">
+                        <div class="form-group col-auto">
+                            <button id="ConfirmCompleted" class="btn btn-success">Confirm Completed</button>
+                        </div>
+                        <div class="form-group col-auto">
+                            <button id="RemoveBook" class="btn btn-secondary">Remove Book</button>
+                        </div>
+                        <div class="form-group col-auto mr-4">
+                            <a href="/queue/upload/"><button onclick="javascript:location.assign('/queue/upload/');return false;" class="btn btn-outline-dark">Upload New Book</button></a>
+                        </div>
+                    </div>
+                    <hr class="mt-0">
+                    <div class="form-row">
+                        <div class="form-group col-8">
+                            <label for="QueueSlider">Queue&nbsp;&rarr;&nbsp;<span class="QueueNum"></span>&nbsp;|&nbsp;<span id="WorkerList">{SELECT_WORKER}</span></label>
+                            <input name="return_queue_number" id="QueueSlider" value="1" min="1" max="11" type="range" class="custom-range" style="border:0;">
+                        </div>
+                        <div class="form-group col-auto">
+                            <button id="ReturnToQueue" class="btn btn-outline-dark mt-4">Return to Queue <span class="QueueNum"></span></button>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-12">
+                            Move file to:&nbsp;&nbsp;
+                            <span id="FilePath1" class="mark lead px-0">Select Queue and Worker above to retrieve location</span><span id="FilePathName" class="mark lead px-0"></span><span id="FilePath2" class="mark lead px-0"></span>&nbsp;&nbsp;
+                            <span id="WorkerRole">Worker's role: <span id="Wrole" class="font-weight-bold"></span></span>
+                        </div>
+                    </div>
+                </div>
+                </fieldset>
+            </div>
+        </form>
+    </div>
+</div>
+
+{AVAILABLE_BOOKS}
+
+<script>
+    $('#RequestBook').on('click', function () {
+        $.post('/queue/coordinator/', { request: {PIBN}, queue: 9 }).done(function(data) {
+            location.assign('/queue/coordinator/');
+        });
+    });
+
+    $('#ConfirmCompleted').on('click', function (event) {
+        event.preventDefault();
+        submitForm(10);
+    });
+
+    $('#RemoveBook').on('click', function (event) {
+        event.preventDefault();
+        submitForm(11);
+    });
+
+    $('#ReturnToQueue').on('click', function (event) {
+        event.preventDefault();
+
+        if ($('#QueueSlider').val() < 10) {
+            $(this).data('clicked', true);
+        } else {
+            $(this).data('clicked', false);
+        }
+
+        submitForm($('#QueueSlider').val());
+    });
+
+    function submitForm(queue) {
+        var input = $('<input>').attr('type', 'hidden').attr('name', 'next_queue').val(queue);
+        $('#Form9').append(input);
+        $('#Form9').submit();
+    };
+
+    $('#Form9').validate({
+        ignore: [],
+        rules: {
+            requested_user: {
+                required: {
+                    depends: function (element) {
+                        return $('#ReturnToQueue').data('clicked');
+                    }
+                }
+            }
+        },
+        messages: {
+            requested_user: 'No Worker available'
+        }
+    });
+
+    var arrQueue = [{QUEUE_NAMES}];
+    var arrQueueFolder = [{QUEUE_FOLDER}];
+    $('#WorkerRole').hide();
+
+    $('.QueueNum').html($('#QueueSlider').val() + '. ' + arrQueue[$('#QueueSlider').val()]);
+    var folders = arrQueueFolder[$('#QueueSlider').val()].split('|');
+    $('#FilePath1').text({PIBN}  + folders[0]);
+    $('#FilePath2').text(folders[1]);
+
+    if (folders[1]) {
+        $('#FilePathName').text($("#InputWorker").text());
+    }
+
+    $('#QueueSlider').on('input', function () {
+        $('.QueueNum').html($(this).val() + '. ' + arrQueue[$(this).val()]);
+        var folders = arrQueueFolder[$(this).val()].split('|');
+
+        $.post('/queue/', { slider_queue:  $(this).val() }).done(function(data) {
+            $('#WorkerList').html(data);
+
+            if (folders[1]) {
+                $('#FilePathName').text($("#InputWorker").text());
+            } else {
+                $('#FilePathName').text('');
+            }
+        });
+
+        $('#FilePath1').text({PIBN} + folders[0]);
+        $('#FilePath2').text(folders[1]);
+    });
+
+    $('#collapseCommentsToggle').on('click', function () {
+        $('#collapseComments').not('.in').collapse('show').addClass('in');
+        $('#collapseComments.in').collapse('hide').removeClass('in');
+        return false;
+    });
+
+    $('#collapseWorkPathToggle').on('click', function () {
+        $('#collapseWorkPath').not('.in').collapse('show').addClass('in');
+        $('#collapseWorkPath.in').collapse('hide').removeClass('in');
+        return false;
+    });
+</script>

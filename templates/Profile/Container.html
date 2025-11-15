@@ -1,0 +1,63 @@
+<div class="row mt-4 mb-4">
+    <div class="col-12">
+        <h2>User Profile
+            <small class="text-muted font-weight-light text-capitalize">&bullet; {LOGGED_FULL_NAME} | {LOGGED_ROLE}</small>
+        </h2>
+    </div>
+</div>
+<div class="row justify-content-center">
+    <div class="col-6 mb-5">
+        <div class="card">
+            <h5 class="card-header"><i class="fa fa-key"></i>&nbsp;&nbsp;Change Password</h5>
+            <div class="card-body">
+                <form id="ChangePwForm" action="/profile/" method="post">
+                    <div class="form-group">
+                        <input name="password_current" id="PasswordCurrent" class="form-control" type="password" placeholder="Current Password">
+                    </div>
+                    <div class="form-group">
+                        <input name="password" id="Password" class="form-control" type="password" placeholder="New Password">
+                    </div>
+                    <div class="form-group">
+                        <input name="password_c" id="ConfirmPassword" class="form-control" type="password" placeholder="Confirm New Password">
+                    </div>
+                    <div class="text-center">
+                        <button class="btn btn-secondary" type="submit">Change Password</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $('#ChangePwForm').validate({
+        rules: {
+            password_current: {
+                required: true
+            },
+            password: {
+                required: true,
+                minlength: 5
+            },
+            password_c: {
+                required: true,
+                minlength: 5,
+                equalTo: "#Password"
+            }
+        },
+        messages: {
+            password_current: {
+                required: "Provide your current password"
+            },
+            password: {
+                required: "Provide new password",
+                minlength: "Your password must be at least 5 characters long"
+            },
+            password_c: {
+                required: "Confirm new password",
+                minlength: "Your password must be at least 5 characters long",
+                equalTo: "Enter the same password as above"
+            }
+        }
+    });
+</script>

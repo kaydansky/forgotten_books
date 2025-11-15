@@ -1,0 +1,15 @@
+<div class="input-group mr-4 float-left" style="width: 170px;">
+    <form action="/queue/coordinator/" method="get" onsubmit="return false;">
+        <input id="pibnInput" name="id" value="" placeholder="Select PIBN" type="text" class="form-control mr-1">
+    </form>
+</div>
+
+<script>
+    $('#pibnInput').autocomplete({
+        source: '/queue/coordinator/',
+        minLength: 1,
+        select: function (event, ui) {
+            window.location.assign('/queue/coordinator/?id=' + ui.item.id);
+        }
+    });
+</script>

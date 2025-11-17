@@ -1,10 +1,14 @@
 <?php
 
-const DATABASE_CREDENTIALS = [
-    'hostname' => 'localhost',
-    'database' => 'forgotten_books',
-    'username' => 'root',
-    'password' => ''
+$config['db'] = [
+    'driver'    => 'mysql',
+    'host'      => getenv('DB_HOST') ?: '127.0.0.1',
+    'port'      => getenv('DB_PORT') ?: 3306,
+    'database'  => getenv('DB_NAME') ?: 'forgotten_books',
+    'username'  => getenv('DB_USER') ?: 'root',
+    'password'  => getenv('DB_PASSWORD') ?: '',
+    'charset'   => 'utf8mb4',
+    'collation' => 'utf8mb4_unicode_ci',
 ];
 
 const EMAIL_SENDER = [

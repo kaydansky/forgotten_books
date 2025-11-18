@@ -3,12 +3,22 @@
 $config['db'] = [
     'driver'    => 'mysql',
     'host'      => getenv('DB_HOST') ?: '127.0.0.1',
-    'port'      => getenv('DB_PORT') ?: 3306,
+    'port'      => (int)(getenv('DB_PORT') ?: 3306),
     'database'  => getenv('DB_NAME') ?: 'forgotten_books',
     'username'  => getenv('DB_USER') ?: 'root',
     'password'  => getenv('DB_PASSWORD') ?: '',
     'charset'   => 'utf8mb4',
     'collation' => 'utf8mb4_unicode_ci',
+    'dsn'       => sprintf(
+        'mysql:host=%s;port=%d;dbname=%s;charset=utf8mb4',
+        getenv('DB_HOST') ?: '127.0.0.1',
+        (int)(getenv('DB_PORT') ?: 3306),
+        getenv('DB_NAME') ?: 'forgotten_books'
+    ),
+    'options'   => [
+        \PDO::MYSQL_ATTR_SSL_CA => '/etc/ssl/certs/yandex-ca.pem',
+        \PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT => true
+    ],
 ];
 
 const EMAIL_SENDER = [

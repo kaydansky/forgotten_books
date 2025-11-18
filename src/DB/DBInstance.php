@@ -16,11 +16,13 @@ class DBInstance
 
     static function dsn()
     {
+        global $config;
         return static::$instance ?? (static::$instance = PdoDatabase::fromDsn(
             new PdoDsn(
-                'mysql:dbname=' . DATABASE_CREDENTIALS['database'] . ';host=' . DATABASE_CREDENTIALS['hostname'],
-                DATABASE_CREDENTIALS['username'],
-                DATABASE_CREDENTIALS['password']
+                $config['db']['dsn'],
+                $config['db']['username'],
+                $config['db']['password'],
+                $config['db']['options'] ?? []
             )
         ));
     }

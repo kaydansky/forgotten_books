@@ -1,27 +1,39 @@
 <?php
-define('NETLIFY', true);
+$source = realpath(__DIR__ . '/..'); 
+$target = '/tmp/site'; 
 
-$projectDir = '/tmp/forgotten_books';
-if (!file_exists($projectDir)) {
-  copy_dir(__DIR__ . '/..', $projectDir);
+if (!is_dir($target)) {
+    mkdir($target, 0777, true);
+
+    $copy = function ($from, $to) use (&$copy) {
+        foreach (scandir($from) as $item) {
+            if ($item === '.' || $item === '..') continue;
+
+            $src = $from . '/' . $item;
+            $dst = $to . '/' . $item;
+
+            if (is_dir($src)) {
+                mkdir($dst, 0777, true);
+                $copy($src, $dst);
+            } else {
+                copy($src, $dst);
+            }
+        }
+    };
+
+    $copy($source, $target);
 }
-chdir($projectDir);
 
-$port = getenv('PORT') ?: 8000;
-passthru("php -S 0.0.0.0:$port -t .");
+chdir($target);
 
-function copy_dir($src, $dst) {
-  $dir = opendir($src);
-  mkdir($dst);
-  while($file = readdir($dir)) {
-    if ($file != '.' && $file != '..') {
-      if (is_dir($src . '/' . $file)) {
-        copy_dir($src . '/' . $file, $dst . '/' . $file);
-      } else {
-        copy($src . '/' . $file, $dst . '/' . $file);
-      }
-    }
-  }
-  closedir($dir);
+$_SERVER['SCRIPT_FILENAME'] = $target . '/index.php';
+$_SERVER['SCRIPT_NAME']     = '/index.php';
+$_SERVER['PHP_SELF']        = '/index.php';
+$_SERVER['REQUEST_URI']     = parse_url($_SERVER['X_ORIGINAL_URI'] ?? '/', PHP_URL_PATH)
+                            ?: '/';
+
+foreach ($_ENV as $key => $value) {
+    putenv("$key=$value");
 }
-?>
+
+require 'index.php';

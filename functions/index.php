@@ -36,4 +36,4 @@ foreach ($_ENV as $key => $value) {
     putenv("$key=$value");
 }
 
-require 'index.php';
+require $target . '/index.php';

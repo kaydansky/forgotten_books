@@ -14,7 +14,7 @@ COPY . .
 RUN chown -R www-data:www-data /var/www/html
 
 # Экспонируем порт
-EXPOSE 80
+EXPOSE 8000
 
 # Запуск Apache
 CMD ["apache2-foreground"]
